@@ -44,7 +44,7 @@ jobs:
         with:
           args: >
             -Dsonar.projectKey=Lageota_nodesecops-github-actions
-            -Dsonar.organization=Lageota
+            -Dsonar.organization=lageota
 
   deploy:
         name: Deploy para Produção
