@@ -117,10 +117,10 @@ jobs:
                 export PM2_HOME=${APP_DIR}/.pm2
 
               
-                sudo -u ${WEB_USER} pm2 restart nodesecops-app || sudo -u ${WEB_USER} pm2 start app.js --name nodesecops-app
+                pm2 restart nodesecops-app || pm2 start app.js --name nodesecops-app
                 
                 
-                sudo -u ${WEB_USER} pm2 save
+                pm2 save
                 
 
                 echo "Deploy concluído com sucesso!"
