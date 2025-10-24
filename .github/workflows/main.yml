@@ -56,12 +56,8 @@ jobs:
           - name: Checkout código
             uses: actions/checkout@v3
 
-          - name: Setup Node.js e criar artefato
-            uses: actions/setup-node@v3
-            with:
-              node-version: '18'
-          - run: npm install
-          - run: zip -r release.zip . -x ".git/*" ".github/*"
+          - name: Empacotar aplicação para deploy
+            run: zip -r release.zip . -x ".git/*" ".github/*" "node_modules/*"
 
           # ETAPA ATUALIZADA
           - name: Deploy para Servidor LiteSpeed
@@ -79,12 +75,15 @@ jobs:
                 echo "Garantindo que o diretório ${APP_DIR} exista..."
                 mkdir -p ${APP_DIR}
 
-                echo "Movendo o pacote para o diretório da aplicação..."
-                mv release.zip ${APP_DIR}/
+                echo "Copiando o novo pacote para ${APP_DIR}..."
+                sudo mv ~/release.zip ${APP_DIR}/release.zip
 
                 cd ${APP_DIR}
                 echo "Descompactando a aplicação em $(pwd)..."
                 unzip -o release.zip
+
+                echo "Removendo o arquivo zip..."
+                sudo rm release.zip
 
                 echo "Instalando dependências de produção..."
                 npm install --production
