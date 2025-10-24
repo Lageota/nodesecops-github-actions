@@ -113,8 +113,8 @@ jobs:
 
                 echo "Reiniciando a aplicação com PM2..."
 
-                export PM2_HOME=${APP_DIR}/.pm2
+                sudo -E PM2_HOME=${APP_DIR}/.pm2 -u ${WEB_USER} pm2 restart nodesecops-app || sudo -E PM2_HOME=${APP_DIR}/.pm2 -u ${WEB_USER} pm2 start app.js --name nodesecops-app
 
-                sudo -u ${WEB_USER} pm2 restart nodesecops-app || sudo -u ${WEB_USER} pm2 start app.js --name nodesecops-app
+                sudo -E PM2_HOME=${APP_DIR}/.pm2 -u ${WEB_USER} pm2 save
 
                 echo "Deploy concluído com sucesso!"
