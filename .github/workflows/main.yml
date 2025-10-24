@@ -109,18 +109,12 @@ jobs:
                 echo "Ajustando permissões para ${WEB_USER}:${WEB_GROUP}..."
                 sudo chown -R ${WEB_USER}:${WEB_GROUP} ${APP_DIR}
 
-                
-                
-                echo "Reiniciando a aplicação com PM2..."
-
-                
                 export PM2_HOME=${APP_DIR}/.pm2
 
-              
-                pm2 restart nodesecops-app || pm2 start app.js --name nodesecops-app
-                
-                
-                pm2 save
-                
+                echo "Reiniciando a aplicação com PM2..."
+
+                export PM2_HOME=${APP_DIR}/.pm2
+
+                sudo -u ${WEB_USER} pm2 restart nodesecops-app || sudo -u ${WEB_USER} pm2 start app.js --name nodesecops-app
 
                 echo "Deploy concluído com sucesso!"
