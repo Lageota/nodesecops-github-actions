@@ -35,7 +35,7 @@ jobs:
         with:
           command: monitor
 
-      # Passo 4: Análise de Código Estático com SonarCloud
+      # Passo 4: Análise de Código Estático com SonarCloud.
       - name: Rodar SonarCloud Scan
         uses: SonarSource/sonarqube-scan-action@v6
         env:
