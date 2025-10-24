@@ -1,2 +1,2 @@
 # nodesecops-github-actions
-Projeto para aplicar algumas praticas de devsecops
+Projeto para testar e simular boas praticas de segurança.
