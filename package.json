@@ -1,0 +1,16 @@
+{
+  "name": "nodesecops-vulnerable-app",
+  "version": "1.0.0",
+  "description": "Uma aplicação Node.js intencionalmente vulnerável para testes de DevSecOps.",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ejs": "2.5.7",
+    "express": "4.16.1"
+  }
+}
