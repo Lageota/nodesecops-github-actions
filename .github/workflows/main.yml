@@ -43,7 +43,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
           args: >
-            -Dsonar.projectKey=nodesecops-github-actions
+            -Dsonar.projectKey=Lageota_nodesecops-github-actions
             -Dsonar.organization=Lageota
 
   deploy:
