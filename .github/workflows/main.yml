@@ -59,38 +59,57 @@ jobs:
           - name: Empacotar aplicação para deploy
             run: zip -r release.zip . -x ".git/*" ".github/*" "node_modules/*"
 
-          # ETAPA ATUALIZADA
-          - name: Deploy para Servidor LiteSpeed
+          
+          - name: Copiar pacote para o servidor
+            uses: appleboy/scp-action@v0.1.7
+            with:
+              host: ${{ secrets.VPS_HOST }}
+              username: ${{ secrets.VPS_USERNAME }}
+              key: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
+              source: "release.zip"
+              target: "/tmp" # Copiamos para uma pasta temporária segura
+
+          
+          - name: Instalar e reiniciar a aplicação no servidor
             uses: appleboy/ssh-action@master
             with:
               host: ${{ secrets.VPS_HOST }}
               username: ${{ secrets.VPS_USERNAME }}
               key: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
               script: |
-                # Variáveis para facilitar a manutenção
+                
                 APP_DIR="/usr/local/lsws/Example/html/node"
                 WEB_USER="nobody"
                 WEB_GROUP="nogroup"
 
                 echo "Garantindo que o diretório ${APP_DIR} exista..."
-                mkdir -p ${APP_DIR}
+                sudo mkdir -p ${APP_DIR}
 
-                echo "Copiando o novo pacote para ${APP_DIR}..."
-                sudo mv ~/release.zip ${APP_DIR}/release.zip
+                
+                echo "Movendo o pacote de /tmp para ${APP_DIR}..."
+                sudo mv /tmp/release.zip ${APP_DIR}/release.zip
 
+                
                 cd ${APP_DIR}
-                echo "Descompactando a aplicação em $(pwd)..."
-                unzip -o release.zip
+                echo "Diretório atual: $(pwd)"
 
+                
+                echo "Descompactando a aplicação..."
+                sudo unzip -o release.zip
+
+                
                 echo "Removendo o arquivo zip..."
                 sudo rm release.zip
 
-                echo "Instalando dependências de produção..."
-                npm install --production
+                
+                echo "Instalando dependências..."
+                sudo npm install --production --prefix ${APP_DIR}
 
-                echo "Ajustando permissões para o usuário ${WEB_USER}:${WEB_GROUP}..."
-                chown -R ${WEB_USER}:${WEB_GROUP} ${APP_DIR}
+                
+                echo "Ajustando permissões para ${WEB_USER}:${WEB_GROUP}..."
+                sudo chown -R ${WEB_USER}:${WEB_GROUP} ${APP_DIR}
 
+                
                 echo "Reiniciando a aplicação com PM2..."
                 sudo -u ${WEB_USER} pm2 restart nodesecops-app || sudo -u ${WEB_USER} pm2 start app.js --name nodesecops-app
 
